@@ -294,11 +294,11 @@ module ParseResource
         environment = defined?(Rails) && Rails.respond_to?(:env) ? Rails.env : ENV["RACK_ENV"]
         if FileTest.exist? (path)
           YAML.load(ERB.new(File.new(path).read).result)[environment]
-        elsif ENV["PARSE_RESOURCE_APPLICATION_ID"] && ENV["PARSE_RESOURCE_MASTER_KEY"]
+        elsif ENV["PARSE_RESOURCE_APPLICATION_ID"] && ENV["PARSE_RESOURCE_MASTER_KEY"] && ENV["PARSE_RESOURCE_PARSE_URI"]
           settings = HashWithIndifferentAccess.new
           settings['app_id'] = ENV["PARSE_RESOURCE_APPLICATION_ID"]
           settings['master_key'] = ENV["PARSE_RESOURCE_MASTER_KEY"]
-          settings['base_uri'] = ENV["PARSE_RESOURCE_BASE_URI"]
+          settings['parse_uri'] = ENV["PARSE_RESOURCE_PARSE_URI"]
           settings
         else
           raise "Cannot load parse_resource.yml and API keys are not set in environment"
