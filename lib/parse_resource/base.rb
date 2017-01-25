@@ -175,8 +175,8 @@ module ParseResource
     #
     # @param [String] app_id the Application ID of your Parse database
     # @param [String] master_key the Master Key of your Parse database
-    def self.load!(app_id, master_key, base_uri)
-      @@settings = {"app_id" => app_id, "master_key" => master_key, "base_uri" => base_uri}
+    def self.load!(app_id, master_key, parse_uri)
+      @@settings = {"app_id" => app_id, "master_key" => master_key, "parse_uri" => parse_uri}
     end
 
     def self.settings
