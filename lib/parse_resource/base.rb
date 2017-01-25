@@ -175,8 +175,8 @@ module ParseResource
     #
     # @param [String] app_id the Application ID of your Parse database
     # @param [String] master_key the Master Key of your Parse database
-    def self.load!(app_id, master_key)
-      @@settings = {"app_id" => app_id, "master_key" => master_key}
+    def self.load!(app_id, master_key, base_uri)
+      @@settings = {"app_id" => app_id, "master_key" => master_key, "base_uri" => base_uri}
     end
 
     def self.settings
@@ -201,7 +201,7 @@ module ParseResource
 
     # Gets the current class's Parse.com base_uri
     def self.model_base_uri
-      "https://api.parse.com/1/#{model_name_uri}"
+      @@settings['parse_uri'] + model_name_uri
     end
 
     # Gets the current instance's parent class's Parse.com base_uri
@@ -231,7 +231,7 @@ module ParseResource
       return true if save_objects.blank?
       load_settings
 
-      base_uri = "https://api.parse.com/1/batch"
+      base_uri = @@settings['parse_uri'] + "batch"
       app_id     = @@settings['app_id']
       master_key = @@settings['master_key']
 
@@ -298,6 +298,7 @@ module ParseResource
           settings = HashWithIndifferentAccess.new
           settings['app_id'] = ENV["PARSE_RESOURCE_APPLICATION_ID"]
           settings['master_key'] = ENV["PARSE_RESOURCE_MASTER_KEY"]
+          settings['base_uri'] = ENV["PARSE_RESOURCE_BASE_URI"]
           settings
         else
           raise "Cannot load parse_resource.yml and API keys are not set in environment"
@@ -313,7 +314,7 @@ module ParseResource
     def self.upload(file_instance, filename, options={})
       load_settings
 
-      base_uri = "https://api.parse.com/1/files"
+      base_uri = @@settings['parse_uri'] + "files"
 
       #refactor to settings['app_id'] etc
       app_id     = @@settings['app_id']
